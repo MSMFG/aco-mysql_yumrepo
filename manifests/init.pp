@@ -67,6 +67,15 @@ class mysql_yumrepo (
         'Fedora'             => 'fc',
         default              => 'el'
       }
+      if $::operatingsystem == 'Amazon' {
+        if (versioncmp($::operatingsystemmajrelease, '2') == 0) {
+          $os_maj_release = '7'
+        } else {
+          $os_maj_release = '6'
+        }
+      } else {
+        $os_maj_release = $::operatingsystemmajrelease
+      }
 
       # install YUM repositories
       Yumrepo {
@@ -76,79 +85,79 @@ class mysql_yumrepo (
 
       yumrepo { 'mysql-connectors-community':
         descr   => 'MySQL Connectors Community',
-        baseurl => "http://repo.mysql.com/yum/mysql-connectors-community/${os}/${::operatingsystemmajrelease}/\$basearch/",
+        baseurl => "http://repo.mysql.com/yum/mysql-connectors-community/${os}/${os_maj_release}/\$basearch/",
         enabled => $enable_connectors
       }
 
       yumrepo { 'mysql-connectors-community-source':
         descr   => 'MySQL Connectors Community - Source',
-        baseurl => "http://repo.mysql.com/yum/mysql-connectors-community/${os}/${::operatingsystemmajrelease}/SRPMS",
+        baseurl => "http://repo.mysql.com/yum/mysql-connectors-community/${os}/${os_maj_release}/SRPMS",
         enabled => $enable_connectors_src
       }
 
-      unless ($os == 'el' and versioncmp($::operatingsystemmajrelease, '5') == 0) {
+      unless ($os == 'el' and versioncmp($os_maj_release, '5') == 0) {
         yumrepo { 'mysql-tools-community':
           descr   => 'MySQL Tools Community',
-          baseurl => "http://repo.mysql.com/yum/mysql-tools-community/${os}/${::operatingsystemmajrelease}/\$basearch/",
+          baseurl => "http://repo.mysql.com/yum/mysql-tools-community/${os}/${os_maj_release}/\$basearch/",
           enabled => $enable_tools
         }
 
         yumrepo { 'mysql-tools-community-source':
           descr   => 'MySQL Tools Community - Source',
-          baseurl => "http://repo.mysql.com/yum/mysql-tools-community/${os}/${::operatingsystemmajrelease}/SRPMS",
+          baseurl => "http://repo.mysql.com/yum/mysql-tools-community/${os}/${os_maj_release}/SRPMS",
           enabled => $enable_tools_src
         }
       }
 
-      if ($os == 'el' and versioncmp($::operatingsystemmajrelease, '6') >= 0) or ($os == 'fc' and versioncmp($::operatingsystemmajrelease, '22') >= 0) {
+      if ($os == 'el' and versioncmp($os_maj_release, '6') >= 0) or ($os == 'fc' and versioncmp($os_maj_release, '22') >= 0) {
         yumrepo { 'mysql-tools-preview':
           descr   => 'MySQL Tools Preview',
-          baseurl => "http://repo.mysql.com/yum/mysql-tools-preview/${os}/${::operatingsystemmajrelease}/\$basearch/",
+          baseurl => "http://repo.mysql.com/yum/mysql-tools-preview/${os}/${os_maj_release}/\$basearch/",
           enabled => $enable_tools_preview
         }
 
         yumrepo { 'mysql-tools-preview-source':
           descr   => 'MySQL Tools Preview - Source',
-          baseurl => "http://repo.mysql.com/yum/mysql-tools-preview/${os}/${::operatingsystemmajrelease}/SRPMS",
+          baseurl => "http://repo.mysql.com/yum/mysql-tools-preview/${os}/${os_maj_release}/SRPMS",
           enabled => $enable_tools_preview_src
         }
       }
 
-      if ($os == 'el' and versioncmp($::operatingsystemmajrelease, '6') >= 0) or ($os == 'sles' and versioncmp($::operatingsystemmajrelease, '11') == 0) {
+      if ($os == 'el' and versioncmp($os_maj_release, '6') >= 0) or ($os == 'sles' and versioncmp($os_maj_release, '11') == 0) {
         yumrepo { 'mysql55-community':
           descr   => 'MySQL 5.5 Community Server',
-          baseurl => "http://repo.mysql.com/yum/mysql-5.5-community/${os}/${::operatingsystemmajrelease}/\$basearch/",
+          baseurl => "http://repo.mysql.com/yum/mysql-5.5-community/${os}/${os_maj_release}/\$basearch/",
           enabled => $enable_55
         }
 
         yumrepo { 'mysql55-community-source':
           descr   => 'MySQL 5.5 Community Server - Source',
-          baseurl => "http://repo.mysql.com/yum/mysql-5.5-community/${os}/${::operatingsystemmajrelease}/SRPMS",
+          baseurl => "http://repo.mysql.com/yum/mysql-5.5-community/${os}/${os_maj_release}/SRPMS",
           enabled => $enable_55_src
         }
       }
 
       yumrepo { 'mysql56-community':
         descr   => 'MySQL 5.6 Community Server',
-        baseurl => "http://repo.mysql.com/yum/mysql-5.6-community/${os}/${::operatingsystemmajrelease}/\$basearch/",
+        baseurl => "http://repo.mysql.com/yum/mysql-5.6-community/${os}/${os_maj_release}/\$basearch/",
         enabled => $enable_56
       }
 
       yumrepo { 'mysql56-community-source':
         descr   => 'MySQL 5.6 Community Server - Source',
-        baseurl => "http://repo.mysql.com/yum/mysql-5.6-community/${os}/${::operatingsystemmajrelease}/SRPMS",
+        baseurl => "http://repo.mysql.com/yum/mysql-5.6-community/${os}/${os_maj_release}/SRPMS",
         enabled => $enable_56_src
       }
 
       yumrepo { 'mysql57-community':
         descr   => 'MySQL 5.7 Community Server',
-        baseurl => "http://repo.mysql.com/yum/mysql-5.7-community/${os}/${::operatingsystemmajrelease}/\$basearch/",
+        baseurl => "http://repo.mysql.com/yum/mysql-5.7-community/${os}/${os_maj_release}/\$basearch/",
         enabled => $enable_57
       }
 
       yumrepo { 'mysql57-community-source':
         descr   => 'MySQL 5.7 Community Server - Source',
-        baseurl => "http://repo.mysql.com/yum/mysql-5.7-community/${os}/${::operatingsystemmajrelease}/SRPMS",
+        baseurl => "http://repo.mysql.com/yum/mysql-5.7-community/${os}/${os_maj_release}/SRPMS",
         enabled => $enable_57_src
       }
 
